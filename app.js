@@ -6,6 +6,8 @@ const { errors } = require('celebrate');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
+const { limiter } = require('./middlewares/limiter');
+
 // роуты
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
@@ -15,11 +17,11 @@ const { loginUser, registerUser } = require('./controllers/users');
 // централизованный обработчик ошибок
 const { errorHandler } = require('./middlewares/error-handler');
 
-const {PORT = 3000} = process.env;
+const { PORT = 3000 } = process.env;
 // Подключение базы данных
 mongoose.connect('mongodb://127.0.0.1/moviesdb')
   .then(() => {
-    console.log('Connecting to database...')
+    console.log('Connecting to database...');
   })
   .catch((err) => {
     console.log(`Ошибка ${err.message}`);
@@ -30,6 +32,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use(requestLogger);
+
+app.use(limiter);
 
 // подключить роуты
 app.post('/signin', validateAuth, loginUser);
@@ -45,5 +49,5 @@ app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`)
+  console.log(`App listening on port ${PORT}`);
 });

@@ -7,7 +7,7 @@ const BadRequest = require('../utils/errorConstructor/BadRequest');
 const Unauthorized = require('../utils/errorConstructor/Unauthorized');
 const ConflictError = require('../utils/errorConstructor/ConflicrError');
 
-const { NODE_ENV, JWT_SECRET} = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 const {
   MONGO_DUPLICATE_KEY_ERROR,
   SUCCESS_CREATED,
@@ -33,7 +33,7 @@ const getCurrentUser = (req, res, next) => {
 
 const updateUser = (req, res, next) => {
   userSchema
-    .findByIdAndUpdate(req.user._id, { ...req.body }, { new:true, runValidators: true })
+    .findByIdAndUpdate(req.user._id, { ...req.body }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
         throw new NotFound('Такой пользователь не найден');
@@ -78,7 +78,7 @@ const registerUser = (req, res, next) => {
     });
 };
 
-const loginUser =(req, res, next) => {
+const loginUser = (req, res, next) => {
   const { email, password } = req.body;
 
   userSchema

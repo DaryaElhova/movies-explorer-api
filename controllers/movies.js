@@ -11,7 +11,7 @@ const getMovies = (req, res, next) => {
   const owner = req.user._id;
 
   movieSchema
-    .find({owner})
+    .find({ owner })
     .then((movies) => {
       res.send(movies);
     })
@@ -20,33 +20,45 @@ const getMovies = (req, res, next) => {
 
 // создаёт фильм
 const createMovie = (req, res, next) => {
-  const {country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId} = req.body;
+  const {
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+  } = req.body;
 
-    movieSchema
-      .create({
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailerLink,
-        nameRU,
-        nameEN,
-        thumbnail,
-        movieId,
-        owner: req.user._id,
-      })
-      .then((movie) => {
-        res.status(SUCCESS_CREATED).send(movie);
-      })
-      .catch((err) => {
-        if (err.name === 'ValidationError') {
-          next(new BadRequest('Введенные данные некорректны'));
-        } else {
-          next(err);
-        }
-      });
+  movieSchema
+    .create({
+      country,
+      director,
+      duration,
+      year,
+      description,
+      image,
+      trailerLink,
+      nameRU,
+      nameEN,
+      thumbnail,
+      movieId,
+      owner: req.user._id,
+    })
+    .then((movie) => {
+      res.status(SUCCESS_CREATED).send(movie);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequest('Введенные данные некорректны'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // удаляет сохранённый фильм по id
@@ -60,12 +72,12 @@ const deleteMovie = (req, res, next) => {
       }
       // проверяем соответствие owner фильма и id тек.ользователя
       if (!movie.owner.equals(req.user._id)) {
-         throw new Forbidden('Ошибка доступа');
+        throw new Forbidden('Ошибка доступа');
       }
       return movieSchema
-      .findByIdAndDelete(req.params._id)
-      .orFail(() => new NotFound('Фильм не найден'))
-      .then(() => res.send({ message: 'Фильма удален' }));
+        .findByIdAndDelete(req.params._id)
+        .orFail(() => new NotFound('Фильм не найден'))
+        .then(() => res.send({ message: 'Фильма удален' }));
     })
     .catch((err) => {
       if (err.name === 'CactError') {
@@ -74,7 +86,7 @@ const deleteMovie = (req, res, next) => {
         next(err);
       }
     });
-}
+};
 
 module.exports = {
   getMovies,

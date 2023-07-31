@@ -37,7 +37,7 @@ const validateCreateMovie = celebrate({
     nameEN: Joi.string().required(),
     thumbnail: Joi.string().required().pattern(regex),
     movieId: Joi.string().required(),
-  })
+  }),
 });
 
 module.exports = {
@@ -45,6 +45,4 @@ module.exports = {
   validateCreateMovie,
   validateRegisterUser,
   validateUpdateUser,
-}
-
-
+};
